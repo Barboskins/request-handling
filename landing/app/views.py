@@ -2,6 +2,7 @@ from collections import Counter
 
 from django.shortcuts import render, reverse
 
+from django.http import HttpResponse
 # Для отладки механизма ab-тестирования используйте эти счетчики
 # в качестве хранилища количества показов и количества переходов.
 # но помните, что в реальных проектах так не стоит делать
@@ -44,9 +45,11 @@ def landing(request):
 
 
 def stats(request):
-    res_o = counter_click['original']/counter_show['original']
-    res_t = counter_click['test']/counter_show['test']
-
+    try:
+        res_o = counter_click['original']/counter_show['original']
+        res_t = counter_click['test']/counter_show['test']
+    except ZeroDivisionError:
+        return HttpResponse('Количество показов равно нулю')
     # Реализуйте логику подсчета отношения количества переходов к количеству показов страницы
     # Для вывода результат передайте в следующем формате:
     return render(request, 'stats.html', context={

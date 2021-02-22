@@ -18,10 +18,16 @@ def bus_stations(request):
         msg = current_page.object_list
         if current_page.has_next():
             next_page_url = current_page.next_page_number()
+        else:
+            next_page_url = None
+        if current_page.has_previous():
+            prev_page_url = current_page.previous_page_number()
+        else:
+            prev_page_url = None
     return render(request, 'index.html', context={
         'bus_stations': msg,
         'current_page': current_page,
-        'prev_page_url': None,
+        'prev_page_url': prev_page_url,
         'next_page_url': next_page_url,
     })
 
